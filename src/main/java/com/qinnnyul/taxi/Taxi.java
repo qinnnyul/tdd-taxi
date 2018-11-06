@@ -5,17 +5,23 @@ import java.math.BigDecimal;
 public class Taxi {
 
     public static final double BASE_DISTANCE = 3;
-    public static final BigDecimal BASE_PRICE = BigDecimal.valueOf(11);
+    public static final BigDecimal NIGHT_TIME_BASE_PRICE = BigDecimal.valueOf(13);
+    public static final BigDecimal DAY_TIME_BASE_PRICE = BigDecimal.valueOf(11);
     public static final BigDecimal PRICE_PER_MILE = BigDecimal.valueOf(1.6);
 
-    public BigDecimal chargeFee(double distance) {
+    public BigDecimal chargeFee(Ride ride) {
         BigDecimal result;
-        if (distance <= BASE_DISTANCE) {
-            result = BASE_PRICE;
+        if (ride.getDistance() <= BASE_DISTANCE) {
+            if (ride.getHourOfDay() >= 6 && ride.getHourOfDay() < 23) {
+                result = DAY_TIME_BASE_PRICE;
+            } else {
+                result = NIGHT_TIME_BASE_PRICE;
+            }
+
         } else {
-            BigDecimal modifiedDistance = new BigDecimal(distance).setScale(0, BigDecimal.ROUND_UP);
+            BigDecimal modifiedDistance = new BigDecimal(ride.getDistance()).setScale(0, BigDecimal.ROUND_UP);
             BigDecimal additionalDistance = modifiedDistance.subtract(BigDecimal.valueOf(BASE_DISTANCE));
-            result = BASE_PRICE.add(PRICE_PER_MILE.multiply(additionalDistance));
+            result = DAY_TIME_BASE_PRICE.add(PRICE_PER_MILE.multiply(additionalDistance));
         }
         return result.setScale(1, BigDecimal.ROUND_HALF_UP);
     }
