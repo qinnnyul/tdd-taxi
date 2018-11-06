@@ -22,14 +22,14 @@ public class TaxiTest {
     public void shouldChargeStartingFareWhenDTravelDistanceLessThanBaseDistance() throws Exception {
         double distance = 2.9;
         BigDecimal price = taxi.chargeFee(distance);
-        assertThat(price, is(BigDecimal.valueOf(11)));
+        assertThat(price, is(BigDecimal.valueOf(11.0)));
     }
 
     @Test
-    public void shouldªChargeStartingFareWhenDTravelDistanceEqualsToBaseDistance() throws Exception {
+    public void shouldChargeStartingFareWhenDTravelDistanceEqualsToBaseDistance() throws Exception {
         double distance = 3;
         BigDecimal price = taxi.chargeFee(distance);
-        assertThat(price, is(BigDecimal.valueOf(11)));
+        assertThat(price, is(BigDecimal.valueOf(11.0)));
     }
 
     @Test
@@ -42,5 +42,10 @@ public class TaxiTest {
         assertThat(result, is(0));
     }
 
-
+    @Test
+    public void shouldChargeHigherFeeWhenTravelDistanceHasDecimalNumber() throws Exception {
+        double distance = 4.3;
+        BigDecimal price = taxi.chargeFee(distance);
+        assertThat(price, is(BigDecimal.valueOf(14.2)));
+    }
 }

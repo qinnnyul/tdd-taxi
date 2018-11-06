@@ -13,9 +13,10 @@ public class Taxi {
         if (distance <= BASE_DISTANCE) {
             result = BASE_PRICE;
         } else {
-            BigDecimal additionalDistance = BigDecimal.valueOf(distance - BASE_DISTANCE);
+            BigDecimal modifiedDistance = new BigDecimal(distance).setScale(0, BigDecimal.ROUND_UP);
+            BigDecimal additionalDistance = modifiedDistance.subtract(BigDecimal.valueOf(BASE_DISTANCE));
             result = BASE_PRICE.add(PRICE_PER_MILE.multiply(additionalDistance));
         }
-        return result;
+        return result.setScale(1, BigDecimal.ROUND_HALF_UP);
     }
 }
