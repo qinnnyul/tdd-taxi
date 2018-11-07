@@ -1,6 +1,9 @@
 package com.qinnnyul.taxi;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Taxi {
 
@@ -26,41 +29,14 @@ public class Taxi {
 
 
     public BigDecimal chargeDayFee(Ride ride) {
-        BigDecimal result = BigDecimal.ZERO;
+        List<TaxiCharger> taxiChargers = Arrays.asList(new BaseFeeTaxiCharger(DAY_TIME_BASE_PRICE), new AdditionalFeeTaxiCharger(DAY_TIME_PRICE_PER_MILE));
+        return taxiChargers.stream().map(taxiCharger -> taxiCharger.chargeFee(ride)).reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        BigDecimal basePrice = getBasePrice(ride, DAY_TIME_BASE_PRICE);
-        result = result.add(basePrice);
-
-        BigDecimal additionalPrice = getAdditionalPrice(ride, DAY_TIME_PRICE_PER_MILE);
-        result = result.add(additionalPrice);
-
-        return result;
     }
 
     public BigDecimal chargeNightFee(Ride ride) {
-        BigDecimal result = BigDecimal.ZERO;
-
-        BigDecimal basePrice = getBasePrice(ride, NIGHT_TIME_BASE_PRICE);
-        result = result.add(basePrice);
-
-        BigDecimal additionalPrice = getAdditionalPrice(ride, NIGHT_TIME_PRICE_PER_MILE);
-        result = result.add(additionalPrice);
-
-        return result;
-    }
-
-
-    private BigDecimal getBasePrice(Ride ride, BigDecimal basePrice) {
-        return ride.getDistance() == 0 ? BigDecimal.ZERO : basePrice;
-    }
-
-    private BigDecimal getAdditionalPrice(Ride ride, BigDecimal pricePerMeter) {
-        if (ride.getDistance()  <= BASE_DISTANCE) {
-            return BigDecimal.ZERO;
-        }
-        double additionalDistance = ride.getDistance() - BASE_DISTANCE;
-        return pricePerMeter.multiply(BigDecimal.valueOf(additionalDistance)
-                .setScale(0, BigDecimal.ROUND_UP));
+        List<TaxiCharger> taxiChargers = Arrays.asList(new BaseFeeTaxiCharger(NIGHT_TIME_BASE_PRICE), new AdditionalFeeTaxiCharger(NIGHT_TIME_PRICE_PER_MILE));
+        return taxiChargers.stream().map(taxiCharger -> taxiCharger.chargeFee(ride)).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
 }
