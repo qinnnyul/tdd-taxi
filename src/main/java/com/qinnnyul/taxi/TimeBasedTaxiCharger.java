@@ -13,11 +13,8 @@ public class TimeBasedTaxiCharger implements TaxiCharger {
 
     @Override
     public BigDecimal chargeFee(Ride ride) {
-        if (isDay(ride)) {
-            return this.dayTaxiCharger.chargeFee(ride).setScale(1, BigDecimal.ROUND_HALF_UP);
-        }
+        return isDay(ride) ? this.dayTaxiCharger.chargeFee(ride).setScale(1, BigDecimal.ROUND_HALF_UP) : this.nightTaxiCharger.chargeFee(ride).setScale(1, BigDecimal.ROUND_HALF_UP);
 
-        return this.nightTaxiCharger.chargeFee(ride).setScale(1, BigDecimal.ROUND_HALF_UP);
     }
 
 

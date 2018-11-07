@@ -2,7 +2,7 @@ package com.qinnnyul.taxi;
 
 import java.math.BigDecimal;
 
-import static com.qinnnyul.taxi.Taxi.BASE_DISTANCE;
+import static com.qinnnyul.taxi.TaxiChargeFactory.BASE_DISTANCE;
 
 public class AdditionalFeeTaxiCharger implements TaxiCharger {
 
