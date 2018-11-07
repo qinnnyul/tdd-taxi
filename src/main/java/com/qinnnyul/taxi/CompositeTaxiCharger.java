@@ -18,8 +18,8 @@ public class CompositeTaxiCharger implements TaxiCharger {
         return this;
     }
 
-    public CompositeTaxiCharger withAdditionalFee(BigDecimal pricePerMeter) {
-        with(new AdditionalFeeTaxiCharger(pricePerMeter));
+    public CompositeTaxiCharger withAdditionalFee(double minMeter, double maxMeter, BigDecimal pricePerMeter) {
+        with(new AdditionalFeeTaxiCharger(minMeter, maxMeter, pricePerMeter));
         return this;
     }
 

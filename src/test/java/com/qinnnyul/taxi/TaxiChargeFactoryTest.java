@@ -14,7 +14,7 @@ public class TaxiChargeFactoryTest {
 
     @Before
     public void setUp() throws Exception {
-        taxiCharger = new TaxiChargeFactory().getTaxiCharger();
+        taxiCharger = new TaxiChargeFactory().getTaxiCharger("normal");
 
     }
 
@@ -70,4 +70,62 @@ public class TaxiChargeFactoryTest {
         assertThat(price, is(BigDecimal.valueOf(15.4)));
     }
 
+    @Test
+    public void shouldChargeBaseFeeWhenShangHaiOuterTravelDistanceLessThanBaseDistance() throws Exception {
+        taxiCharger = new TaxiChargeFactory().getTaxiCharger("shangHaiOuter");
+
+        double distance = 3;
+        Ride ride = new Ride(distance, 8);
+        BigDecimal price = taxiCharger.chargeFee(ride);
+        assertThat(price, is(BigDecimal.valueOf(14.0)));
+    }
+
+    @Test
+    public void shouldChargeAdditionalFeeWhenShangHaiOuterTravelDistanceLargerThanBaseDistance() throws Exception {
+        taxiCharger = new TaxiChargeFactory().getTaxiCharger("shangHaiOuter");
+
+        double distance = 11;
+        Ride ride = new Ride(distance, 9);
+        BigDecimal price = taxiCharger.chargeFee(ride);
+        assertThat(price, is(BigDecimal.valueOf(34.0)));
+
+    }
+
+    @Test
+    public void shouldChargeNightBaseFeeWhenShangHaiOuterTravelDistanceLessThanBaseDistance() throws Exception {
+        taxiCharger = new TaxiChargeFactory().getTaxiCharger("shangHaiOuter");
+
+        double distance = 2.1;
+        Ride ride = new Ride(distance, 23);
+        BigDecimal price = taxiCharger.chargeFee(ride);
+        assertThat(price, is(BigDecimal.valueOf(18.0)));
+    }
+
+    @Test
+    public void shouldChargeDayBaseFeeWhenShangHaiInnerTravelDistanceLessThanBaseDistance() throws Exception {
+        taxiCharger = new TaxiChargeFactory().getTaxiCharger("shangHaiInner");
+
+        Ride ride = new Ride(2.6, 9);
+        BigDecimal price = taxiCharger.chargeFee(ride);
+        assertThat(price, is(BigDecimal.valueOf(14.0)));
+    }
+
+    @Test
+    public void shouldChargeAdditionalFeeWhenShangHaiInnerTravelDistanceLargerThanBaseDistance() throws Exception {
+        taxiCharger = new TaxiChargeFactory().getTaxiCharger("shangHaiInner");
+
+        Ride ride = new Ride(10, 9);
+        BigDecimal price = taxiCharger.chargeFee(ride);
+        assertThat(price, is(BigDecimal.valueOf(31.5)));
+    }
+
+
+    @Test
+    public void shouldChargeAdditionalFeeDiffWhenShangHaiInnerTravelDistanceLargerThanBaseDistance() throws Exception {
+        taxiCharger = new TaxiChargeFactory().getTaxiCharger("shangHaiInner");
+
+        Ride ride = new Ride(11, 9);
+        BigDecimal price = taxiCharger.chargeFee(ride);
+        assertThat(price, is(BigDecimal.valueOf(35.0)));
+    }
 }

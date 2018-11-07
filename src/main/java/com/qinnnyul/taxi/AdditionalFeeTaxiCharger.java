@@ -2,22 +2,24 @@ package com.qinnnyul.taxi;
 
 import java.math.BigDecimal;
 
-import static com.qinnnyul.taxi.TaxiChargeFactory.BASE_DISTANCE;
-
 public class AdditionalFeeTaxiCharger implements TaxiCharger {
 
     private final BigDecimal pricePerMeter;
+    private final double minMeter;
+    private final double maxMeter;
 
-    public AdditionalFeeTaxiCharger(BigDecimal pricePerMeter) {
+    public AdditionalFeeTaxiCharger(double minMeter, double maxMeter, BigDecimal pricePerMeter) {
         this.pricePerMeter = pricePerMeter;
+        this.minMeter = minMeter;
+        this.maxMeter = maxMeter;
     }
 
     @Override
     public BigDecimal chargeFee(Ride ride) {
-        if (ride.getDistance() <= BASE_DISTANCE) {
+        if (ride.getDistance() <= minMeter) {
             return BigDecimal.ZERO;
         }
-        double additionalDistance = ride.getDistance() - BASE_DISTANCE;
+        double additionalDistance = Math.min(ride.getDistance(), maxMeter) - minMeter;
         return pricePerMeter.multiply(BigDecimal.valueOf(additionalDistance)
                 .setScale(0, BigDecimal.ROUND_UP));
     }
