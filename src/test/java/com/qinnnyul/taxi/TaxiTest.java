@@ -69,4 +69,5 @@ public class TaxiTest {
         BigDecimal price = taxi.chargeFee(ride);
         assertThat(price, is(BigDecimal.valueOf(15.4)));
     }
+
 }

@@ -12,22 +12,43 @@ public class Taxi {
 
     public BigDecimal chargeFee(Ride ride) {
         BigDecimal result;
-        if (ride.getDistance() <= BASE_DISTANCE) {
-            if (ride.getHourOfDay() >= 6 && ride.getHourOfDay() < 23) {
-                result = DAY_TIME_BASE_PRICE;
-            } else {
-                result = NIGHT_TIME_BASE_PRICE;
-            }
-
+        if (ride.getHourOfDay() >= 6 && ride.getHourOfDay() < 23) {
+            result = chargeDayFee(ride);
         } else {
-            BigDecimal modifiedDistance = new BigDecimal(ride.getDistance()).setScale(0, BigDecimal.ROUND_UP);
-            BigDecimal additionalDistance = modifiedDistance.subtract(BigDecimal.valueOf(BASE_DISTANCE));
-            if (ride.getHourOfDay() >= 6 && ride.getHourOfDay() < 23) {
-                result = DAY_TIME_BASE_PRICE.add(DAY_TIME_PRICE_PER_MILE.multiply(additionalDistance));
-            } else {
-                result = NIGHT_TIME_BASE_PRICE.add(NIGHT_TIME_PRICE_PER_MILE.multiply(additionalDistance));
-            }
+            result = chargeNightFee(ride);
         }
         return result.setScale(1, BigDecimal.ROUND_HALF_UP);
     }
+
+
+    public BigDecimal chargeDayFee(Ride ride) {
+        BigDecimal result;
+
+        if (ride.getDistance() <= BASE_DISTANCE) {
+            result = DAY_TIME_BASE_PRICE;
+        } else {
+            BigDecimal modifiedDistance = new BigDecimal(ride.getDistance()).setScale(0, BigDecimal.ROUND_UP);
+            BigDecimal additionalDistance = modifiedDistance.subtract(BigDecimal.valueOf(BASE_DISTANCE));
+            result = DAY_TIME_BASE_PRICE.add(DAY_TIME_PRICE_PER_MILE.multiply(additionalDistance));
+        }
+
+        return result;
+    }
+
+    public BigDecimal chargeNightFee(Ride ride) {
+        BigDecimal result;
+
+        if (ride.getDistance() <= BASE_DISTANCE) {
+            result = NIGHT_TIME_BASE_PRICE;
+        } else {
+            BigDecimal modifiedDistance = new BigDecimal(ride.getDistance()).setScale(0, BigDecimal.ROUND_UP);
+            BigDecimal additionalDistance = modifiedDistance.subtract(BigDecimal.valueOf(BASE_DISTANCE));
+            result = NIGHT_TIME_BASE_PRICE.add(NIGHT_TIME_PRICE_PER_MILE.multiply(additionalDistance));
+        }
+        return result;
+    }
+
 }
+
+
+
