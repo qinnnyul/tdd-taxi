@@ -61,4 +61,12 @@ public class TaxiTest {
         assertThat(price, is(BigDecimal.valueOf(13.0)));
 
     }
+
+    @Test
+    public void shouldChargeNightStartingFeeWhenTravelDistanceLargerThanBaseDistance() throws Exception {
+        double distance = 3.5;
+        Ride ride = new Ride(distance, 5);
+        BigDecimal price = taxi.chargeFee(ride);
+        assertThat(price, is(BigDecimal.valueOf(15.4)));
+    }
 }
