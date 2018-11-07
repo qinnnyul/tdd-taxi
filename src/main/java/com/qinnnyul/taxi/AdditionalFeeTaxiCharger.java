@@ -14,7 +14,7 @@ public class AdditionalFeeTaxiCharger implements TaxiCharger {
 
     @Override
     public BigDecimal chargeFee(Ride ride) {
-        if (ride.getDistance()  <= BASE_DISTANCE) {
+        if (ride.getDistance() <= BASE_DISTANCE) {
             return BigDecimal.ZERO;
         }
         double additionalDistance = ride.getDistance() - BASE_DISTANCE;
