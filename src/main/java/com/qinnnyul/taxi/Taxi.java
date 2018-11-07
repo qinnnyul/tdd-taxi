@@ -12,7 +12,7 @@ public class Taxi {
 
     public BigDecimal chargeFee(Ride ride) {
         BigDecimal result;
-        if (ride.getHourOfDay() >= 6 && ride.getHourOfDay() < 23) {
+        if (isDay(ride)) {
             result = chargeDayFee(ride);
         } else {
             result = chargeNightFee(ride);
@@ -20,32 +20,47 @@ public class Taxi {
         return result.setScale(1, BigDecimal.ROUND_HALF_UP);
     }
 
+    private boolean isDay(Ride ride) {
+        return ride.getHourOfDay() >= 6 && ride.getHourOfDay() < 23;
+    }
+
 
     public BigDecimal chargeDayFee(Ride ride) {
-        BigDecimal result;
+        BigDecimal result = BigDecimal.ZERO;
 
-        if (ride.getDistance() <= BASE_DISTANCE) {
-            result = DAY_TIME_BASE_PRICE;
-        } else {
-            BigDecimal modifiedDistance = new BigDecimal(ride.getDistance()).setScale(0, BigDecimal.ROUND_UP);
-            BigDecimal additionalDistance = modifiedDistance.subtract(BigDecimal.valueOf(BASE_DISTANCE));
-            result = DAY_TIME_BASE_PRICE.add(DAY_TIME_PRICE_PER_MILE.multiply(additionalDistance));
-        }
+        BigDecimal basePrice = getBasePrice(ride, DAY_TIME_BASE_PRICE);
+        result = result.add(basePrice);
+
+        BigDecimal additionalPrice = getAdditionalPrice(ride, DAY_TIME_PRICE_PER_MILE);
+        result = result.add(additionalPrice);
 
         return result;
     }
 
     public BigDecimal chargeNightFee(Ride ride) {
-        BigDecimal result;
+        BigDecimal result = BigDecimal.ZERO;
 
-        if (ride.getDistance() <= BASE_DISTANCE) {
-            result = NIGHT_TIME_BASE_PRICE;
-        } else {
-            BigDecimal modifiedDistance = new BigDecimal(ride.getDistance()).setScale(0, BigDecimal.ROUND_UP);
-            BigDecimal additionalDistance = modifiedDistance.subtract(BigDecimal.valueOf(BASE_DISTANCE));
-            result = NIGHT_TIME_BASE_PRICE.add(NIGHT_TIME_PRICE_PER_MILE.multiply(additionalDistance));
-        }
+        BigDecimal basePrice = getBasePrice(ride, NIGHT_TIME_BASE_PRICE);
+        result = result.add(basePrice);
+
+        BigDecimal additionalPrice = getAdditionalPrice(ride, NIGHT_TIME_PRICE_PER_MILE);
+        result = result.add(additionalPrice);
+
         return result;
+    }
+
+
+    private BigDecimal getBasePrice(Ride ride, BigDecimal basePrice) {
+        return ride.getDistance() == 0 ? BigDecimal.ZERO : basePrice;
+    }
+
+    private BigDecimal getAdditionalPrice(Ride ride, BigDecimal pricePerMeter) {
+        if (ride.getDistance()  <= BASE_DISTANCE) {
+            return BigDecimal.ZERO;
+        }
+        double additionalDistance = ride.getDistance() - BASE_DISTANCE;
+        return pricePerMeter.multiply(BigDecimal.valueOf(additionalDistance)
+                .setScale(0, BigDecimal.ROUND_UP));
     }
 
 }
