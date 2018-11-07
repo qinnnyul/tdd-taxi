@@ -5,5 +5,5 @@ import com.qinnnyul.taxi.model.Ride;
 import java.math.BigDecimal;
 
 public interface TaxiCharger {
-    public BigDecimal chargeFee(Ride ride);
+    BigDecimal chargeFee(Ride ride);
 }

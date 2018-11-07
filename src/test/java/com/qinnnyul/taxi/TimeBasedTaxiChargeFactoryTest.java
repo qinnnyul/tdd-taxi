@@ -10,13 +10,13 @@ import java.math.BigDecimal;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-public class TaxiChargeFactoryTest {
+public class TimeBasedTaxiChargeFactoryTest {
 
     private TaxiCharger taxiCharger;
 
     @Before
     public void setUp() throws Exception {
-        taxiCharger = new TaxiChargeFactory().getTaxiCharger("normal");
+        taxiCharger = new TimeBasedTaxiChargeFactory().getTaxiCharger("normal");
 
     }
 
@@ -74,38 +74,38 @@ public class TaxiChargeFactoryTest {
 
     @Test
     public void shouldChargeBaseFeeWhenShangHaiOuterTravelDistanceLessThanBaseDistance() throws Exception {
-        taxiCharger = new TaxiChargeFactory().getTaxiCharger("shangHaiOuter");
+        taxiCharger = new TimeBasedTaxiChargeFactory().getTaxiCharger("shangHaiOuter");
 
         double distance = 3;
         Ride ride = new Ride(distance, 8);
         BigDecimal price = taxiCharger.chargeFee(ride);
-        assertThat(price, is(BigDecimal.valueOf(14.0)));
+        assertThat(price, is(BigDecimal.valueOf(11.0)));
     }
 
     @Test
     public void shouldChargeAdditionalFeeWhenShangHaiOuterTravelDistanceLargerThanBaseDistance() throws Exception {
-        taxiCharger = new TaxiChargeFactory().getTaxiCharger("shangHaiOuter");
+        taxiCharger = new TimeBasedTaxiChargeFactory().getTaxiCharger("shangHaiOuter");
 
         double distance = 11;
         Ride ride = new Ride(distance, 9);
         BigDecimal price = taxiCharger.chargeFee(ride);
-        assertThat(price, is(BigDecimal.valueOf(34.0)));
+        assertThat(price, is(BigDecimal.valueOf(23.8)));
 
     }
 
     @Test
     public void shouldChargeNightBaseFeeWhenShangHaiOuterTravelDistanceLessThanBaseDistance() throws Exception {
-        taxiCharger = new TaxiChargeFactory().getTaxiCharger("shangHaiOuter");
+        taxiCharger = new TimeBasedTaxiChargeFactory().getTaxiCharger("shangHaiOuter");
 
         double distance = 2.1;
         Ride ride = new Ride(distance, 23);
         BigDecimal price = taxiCharger.chargeFee(ride);
-        assertThat(price, is(BigDecimal.valueOf(18.0)));
+        assertThat(price, is(BigDecimal.valueOf(13.0)));
     }
 
     @Test
     public void shouldChargeDayBaseFeeWhenShangHaiInnerTravelDistanceLessThanBaseDistance() throws Exception {
-        taxiCharger = new TaxiChargeFactory().getTaxiCharger("shangHaiInner");
+        taxiCharger = new TimeBasedTaxiChargeFactory().getTaxiCharger("shangHaiInner");
 
         Ride ride = new Ride(2.6, 9);
         BigDecimal price = taxiCharger.chargeFee(ride);
@@ -114,7 +114,7 @@ public class TaxiChargeFactoryTest {
 
     @Test
     public void shouldChargeAdditionalFeeWhenShangHaiInnerTravelDistanceLargerThanBaseDistance() throws Exception {
-        taxiCharger = new TaxiChargeFactory().getTaxiCharger("shangHaiInner");
+        taxiCharger = new TimeBasedTaxiChargeFactory().getTaxiCharger("shangHaiInner");
 
         Ride ride = new Ride(10, 9);
         BigDecimal price = taxiCharger.chargeFee(ride);
@@ -124,7 +124,7 @@ public class TaxiChargeFactoryTest {
 
     @Test
     public void shouldChargeAdditionalFeeDiffWhenShangHaiInnerTravelDistanceLargerThanBaseDistance() throws Exception {
-        taxiCharger = new TaxiChargeFactory().getTaxiCharger("shangHaiInner");
+        taxiCharger = new TimeBasedTaxiChargeFactory().getTaxiCharger("shangHaiInner");
 
         Ride ride = new Ride(11, 9);
         BigDecimal price = taxiCharger.chargeFee(ride);
