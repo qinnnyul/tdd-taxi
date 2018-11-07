@@ -1,4 +1,4 @@
-package com.qinnnyul.taxi;
+package com.qinnnyul.taxi.model;
 
 public class Ride {
     private final double distance;

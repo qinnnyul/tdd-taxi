@@ -1,4 +1,6 @@
-package com.qinnnyul.taxi;
+package com.qinnnyul.taxi.charger;
+
+import com.qinnnyul.taxi.model.Ride;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

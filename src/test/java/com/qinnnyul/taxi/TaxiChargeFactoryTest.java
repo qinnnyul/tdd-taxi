@@ -1,5 +1,7 @@
 package com.qinnnyul.taxi;
 
+import com.qinnnyul.taxi.charger.TaxiCharger;
+import com.qinnnyul.taxi.model.Ride;
 import org.junit.Before;
 import org.junit.Test;
 
